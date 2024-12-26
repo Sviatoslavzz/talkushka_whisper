@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
-from time import time
+from collections.abc import Callable
 from functools import wraps
 from pathlib import Path
-from typing import Callable, Any
+from time import time
+from typing import Any
 
 from loguru import logger
 

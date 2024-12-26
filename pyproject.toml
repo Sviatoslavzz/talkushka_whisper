@@ -1,0 +1,117 @@
+[project]
+name = "talkushka_whisper_service"
+version = "0.0.1"
+description = "aims to receive tasks for transcribing using WebSocket"
+readme = "README.md"
+authors = [{ name = "Sviatoslav Zaikin" }]
+
+dependencies = [
+#    "openai_whisper==20240930",
+    "faster-whisper~=1.1.0",
+    "loguru~=0.7.3",
+]
+requires-python = ">=3.12"
+
+[project.optional-dependencies]
+dev = [
+    "ruff~=0.8.0"
+]
+test = [
+    "pytest>=8.0.0,<9.0.0",
+    "pytest-asyncio<0.25.0",
+    "pytest-timeout",
+]
+
+#[project.scripts]
+#run_bot = "bot:main"
+#run_cli = "cli:cli"
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+exclude = [
+    ".git",
+    "__pycache__",
+    "*.eggs",
+    "build",
+    "dist",
+    "venv",
+    "saved_files"
+]
+
+
+[tool.ruff.lint]
+ignore = [
+    "RUF001", # String contains ambiguous char
+    "ANN204", # Missing return type annotation for special method `__del__`
+    "T201", # `print` found
+    "RUF003", # Comment contains smth
+    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+    "ANN003", # Missing type annotation for `**kwargs`
+    "ANN002", # Missing type annotation for `*args`
+    "ANN001", # Missing type annotation for function argument `self`
+    "ANN206", # Missing return type annotation for classmethod
+    "ANN201", # Missing return type annotation for public function
+    "ANN202", # Missing return type annotation for private function
+    "ANN401", # Dynamically typed expressions (typing.Any) are disallowed
+    "ISC001",
+]
+
+extend-select = [
+    "A", # flake8-builtins
+    "ANN", # flake8-annotations
+    "B", # flake8-bugbear
+    "C4", # comprehensions
+    "E", "W", # pycodestyle
+    "F", # Pyflakes
+    "I", # isort
+    "ICN",
+    "INP",
+    "ISC",
+    "N", # pep8-naming
+    "NPY",
+    "PERF",
+    "PIE", # flake8-pie
+    "PL",
+    "PT",
+    "Q",
+    "RET",
+    "RUF",
+    "S", # flake8-bandit
+    "SIM", # simplify
+    "T10",
+    "T20", # flake8-print
+    "PTH",
+    "UP",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101", "ANN001", "ANN201", "PLR2004", "INP001", "S105"]
+"conftest.py" = ["S101", "ANN001", "ANN201"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+addopts = '''
+-s
+-vv
+--tb=long
+--asyncio-mode=strict
+'''
+python_files = 'test_*.py'
+filterwarnings = 'ignore::DeprecationWarning'
+cache_dir = 'build/.pytest_cache_dir'
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "asyncio",
+    "ffmpeg", # requires ffmpeg in OS installed
+]

@@ -38,8 +38,11 @@ class FasterWhisperTranscriber(AbstractTranscriber):
 
         logger.info("{self} transcription started", self=self.__repr__())
         segments, info = self.whisper_model.transcribe(path.__fspath__())
-        logger.info("Detected language {language} with probability {prob}", language=info.language,
-                    prob=info.language_probability)
+        logger.info(
+            "Detected language {language} with probability {prob}",
+            language=info.language,
+            prob=info.language_probability,
+        )
         result = ""
         for segment in segments:
             result += segment.text
