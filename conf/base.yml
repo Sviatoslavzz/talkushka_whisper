@@ -1,0 +1,7 @@
+transcriber:
+  q_size: 200
+  cls: FasterWhisperTranscriber
+  model: small
+grpc_server:
+  host: "localhost"
+  port: 50051

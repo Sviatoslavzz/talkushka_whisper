@@ -1,20 +1,25 @@
 [project]
 name = "talkushka_whisper_service"
-version = "0.0.1"
-description = "aims to receive tasks for transcribing using WebSocket"
+version = "1.0.1"
+description = "aims to receive tasks for transcribing using WebSocket and transcribe audio file"
 readme = "README.md"
 authors = [{ name = "Sviatoslav Zaikin" }]
 
 dependencies = [
-#    "openai_whisper==20240930",
+    #    "openai_whisper==20240930",
     "faster-whisper~=1.1.0",
     "loguru~=0.7.3",
+    "grpcio-tools",
+    "pydantic~=2.9.2",
+    "aiofiles",
+    "setproctitle"
 ]
 requires-python = ">=3.12"
 
 [project.optional-dependencies]
 dev = [
-    "ruff~=0.8.0"
+    "ruff~=0.8.0",
+    "betterproto[compiler,rust-codec]==2.0.0b7"
 ]
 test = [
     "pytest>=8.0.0,<9.0.0",
@@ -22,9 +27,8 @@ test = [
     "pytest-timeout",
 ]
 
-#[project.scripts]
-#run_bot = "bot:main"
-#run_cli = "cli:cli"
+[project.scripts]
+run_server = "main:main"
 
 [tool.ruff]
 line-length = 120
@@ -91,6 +95,7 @@ convention = "google"
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "ANN001", "ANN201", "PLR2004", "INP001", "S105"]
 "conftest.py" = ["S101", "ANN001", "ANN201"]
+"src/proto_gen/*" = ["RUF009", "F401", "UP035"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

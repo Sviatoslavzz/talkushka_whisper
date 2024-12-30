@@ -85,3 +85,6 @@ saved_files
 *.binlog
 
 /data
+
+*.crt
+*.key

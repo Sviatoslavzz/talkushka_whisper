@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+service AudioTransfer {
+  rpc StreamAudio(stream AudioChunk) returns (Response) {}
+}
+
+message AudioChunk {
+  bytes payload = 1;
+  int32 chunk_number = 2;
+}
+
+message Response {
+  bool result = 1;
+  optional bytes payload = 2;
+  optional string message = 3;
+}
