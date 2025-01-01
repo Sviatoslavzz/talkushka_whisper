@@ -12,7 +12,7 @@ from utils import get_project_root
 
 def get_ssl_context():
     """
-    Create and configure an SSL context for the gRPC client.
+    Create and configure an SSL context for the gRPC server.
     """
     try:
         cert_path = get_project_root() / "cert"
@@ -46,7 +46,7 @@ async def serve(config: GrpcConfig):
         await server.start(config.host, config.port, ssl=get_ssl_context())
         logger.info("gRPC server started at {host}:{port}", host=config.host, port=config.port)
         for task in asyncio.as_completed(
-                [stop_event.wait(), server.wait_closed()],
+            [stop_event.wait(), server.wait_closed()],
         ):
             await task
             break

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 service AudioTransfer {
   rpc StreamAudio(stream AudioChunk) returns (stream Response) {}
+  rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse) {}
 }
 
 message AudioChunk {
@@ -12,4 +13,12 @@ message Response {
   bool result = 1;
   optional bytes payload = 2;
   optional string message = 4;
+}
+
+message HealthCheckRequest {
+  string message = 1;
+}
+
+message HealthCheckResponse {
+  bool answer = 1;
 }

@@ -88,3 +88,5 @@ saved_files
 
 *.crt
 *.key
+
+src/client.py

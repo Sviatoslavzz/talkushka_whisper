@@ -1,6 +1,6 @@
 [project]
 name = "talkushka_whisper_service"
-version = "1.0.2"
+version = "1.1.0"
 description = "aims to receive tasks for transcribing using WebSocket and transcribe audio file"
 readme = "README.md"
 authors = [{ name = "Sviatoslav Zaikin" }]

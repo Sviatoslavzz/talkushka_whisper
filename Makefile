@@ -1,4 +1,6 @@
 
+GRPC_HOST="localhost"
+
 .PHONY: uninstall_all_dependencies
 
 run:
@@ -18,7 +20,7 @@ uninstall_all_dependencies:
 #	pytest tests/
 
 gen_proto:
-	python -m grpc_tools.protoc -I . --python_betterproto_out=src/proto_gen proto/example.proto
+	python -m grpc_tools.protoc -I . --python_betterproto_out=src/proto_gen proto/talkushka_whisper.proto
 
 gen_ca_cert:
 	openssl genrsa -out cert/ca.key 4096
@@ -28,7 +30,7 @@ gen_ca_cert:
 gen_server_cert:
 	openssl genrsa -out cert/server.key 4096
 	openssl req -new -key cert/server.key -out cert/server.csr \
-	-subj "/C=RU/ST=State/L=City/O=Organization/OU=ServerUnit/CN=localhost"
+	-subj "/C=RU/ST=State/L=City/O=Organization/OU=ServerUnit/CN=$(GRPC_HOST)"
 	openssl x509 -req -in cert/server.csr -CA cert/ca.crt -CAkey cert/ca.key -CAcreateserial -out cert/server.crt -days 365 -sha256
 
 gen_client_cert:

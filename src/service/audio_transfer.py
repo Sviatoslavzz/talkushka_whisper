@@ -8,7 +8,7 @@ from loguru import logger
 
 from app_worker import AppWorker
 from objects import MB, TranscriptionTask
-from proto_gen import AudioChunk, AudioTransferBase, Response
+from proto_gen import AudioChunk, AudioTransferBase, HealthCheckRequest, HealthCheckResponse, Response
 from utils import get_project_root
 
 
@@ -38,7 +38,7 @@ class AudioTransfer(AudioTransferBase):
 
     @staticmethod
     async def write_stream_to_file(audio_chunk_iterator: AsyncIterator[AudioChunk]) -> Path:
-        save_to = (get_project_root() / "data" / f"{uuid.uuid4()}.m4a")
+        save_to = get_project_root() / "data" / f"{uuid.uuid4()}.m4a"
         async with aiofiles.open(file=save_to, mode="wb") as audio_file:
             async for chunk in audio_chunk_iterator:
                 await audio_file.write(chunk.payload)
@@ -64,3 +64,7 @@ class AudioTransfer(AudioTransferBase):
         except FileNotFoundError as e:
             logger.error("Unable to stream file:text file not found {err}", err=e.__repr__())
             yield Response(result=False, message="stream_error:text file not found")
+
+    async def health_check(self, request: HealthCheckRequest) -> HealthCheckResponse:
+        logger.info("Health check request received with message: {mes}", mes=request.message)
+        return HealthCheckResponse(True)

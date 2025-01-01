@@ -11,11 +11,12 @@ class TranscriberConfig(BaseModel):
     cls: type[AbstractTranscriber] | None = Field(
         default_factory=partial(get_transcriber_cls, "FasterWhisperTranscriber"),
         title="Transcriber class",
-        description="Transcriber class, currently available only FasterWhisperTranscriber")
+        description="Transcriber class, currently available only FasterWhisperTranscriber",
+    )
     model: str | None = Field("small", title="Whisper model")
-    pool_size: int | None = Field(4,
-                                  title="Transcriber worker pool size",
-                                  description="How many transcription tasks could be run at parallel")
+    pool_size: int | None = Field(
+        4, title="Transcriber worker pool size", description="How many transcription tasks could be run at parallel"
+    )
 
     @field_validator("cls", mode="before")
     @classmethod

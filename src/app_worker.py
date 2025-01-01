@@ -34,17 +34,12 @@ class AppWorker:
         return cls._instance
 
     async def get_transcription(self, audio_file: Path) -> TranscriptionTask:
-        task = await self.__run_transcriber_executor(
-            TranscriptionTask(id=audio_file.name, audio_path=audio_file)
-        )
+        task = await self.__run_transcriber_executor(TranscriptionTask(id=audio_file.name, audio_path=audio_file))
         await aiofiles.os.unlink(task.audio_path)
 
         return task
 
-    async def __submit_task(
-            self,
-            executor: ProcessExecutor, task_: TranscriptionTask
-    ) -> TranscriptionTask:
+    async def __submit_task(self, executor: ProcessExecutor, task_: TranscriptionTask) -> TranscriptionTask:
         """
         Transfer a task to executor and waits for the result in a separate thread
         :param executor: ProcessExecutor
@@ -53,9 +48,9 @@ class AppWorker:
         self.sem_queue_size += 1
         async with self.semaphore:
             self.sem_queue_size -= 1
-            logger.info("{cls} : tasks waiting in semaphore {size}",
-                        cls=self.__class__.__name__,
-                        size=self.sem_queue_size)
+            logger.info(
+                "{cls} : tasks waiting in semaphore {size}", cls=self.__class__.__name__, size=self.sem_queue_size
+            )
             executor.put_task(task_)
             while True:
                 result = await asyncio.to_thread(executor.get_result)
@@ -79,7 +74,7 @@ class AppWorker:
             executor.configure(
                 q_size=self.config.q_size,
                 context="spawn" if IS_MACOS else "fork",
-                process_name="python_transcriber_worker"
+                process_name="python_transcriber_worker",
             )
             executor.set_name("transcriber_worker")
             executor.start()

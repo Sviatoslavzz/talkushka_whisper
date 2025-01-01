@@ -3,6 +3,7 @@ from pathlib import Path
 
 MB = 1024 * 1024
 
+
 @dataclass(slots=True)
 class TranscriptionTask:
     id: str
