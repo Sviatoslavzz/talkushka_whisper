@@ -3,15 +3,11 @@
 # plugin: python-betterproto
 # This file has been @generated
 
+from collections.abc import AsyncIterable, AsyncIterator, Iterable
 from dataclasses import dataclass
 from typing import (
     TYPE_CHECKING,
-    AsyncIterable,
-    AsyncIterator,
-    Dict,
-    Iterable,
     Optional,
-    Union,
 )
 
 import betterproto

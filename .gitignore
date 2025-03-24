@@ -88,5 +88,7 @@ saved_files
 
 *.crt
 *.key
+*.csr
+*.srl
 
-src/client.py
+src/talkushka_transcriber/client.py

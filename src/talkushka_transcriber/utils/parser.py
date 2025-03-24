@@ -3,9 +3,9 @@ from pathlib import Path
 
 from loguru import logger
 
-from config.base import ConfigModelType, YAMLConfig
-from config.models import BaseConfig
-from utils import get_version
+from talkushka_transcriber.config.base import ConfigModelType, YAMLConfig
+from talkushka_transcriber.config.models import BaseConfig
+from talkushka_transcriber.utils import get_version
 
 
 class ConfigModelFileType:

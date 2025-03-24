@@ -62,7 +62,7 @@ class AbstractExecutor:
                 logger.info("Got new task from task_queue")
                 async_tasks.append(asyncio.create_task(process_in_target(task)))
             async_tasks = [task for task in async_tasks if not task.done()]
-            await asyncio.sleep(0.1)
+            await asyncio.sleep(0.5)
 
         if async_tasks:
             logger.warning(f"Finishing process with running async tasks ~ {len(async_tasks)}: waiting...")

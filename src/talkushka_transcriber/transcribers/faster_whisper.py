@@ -1,18 +1,18 @@
-from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Any
 
 from faster_whisper import WhisperModel
 from loguru import logger
+from pydantic import BaseModel
 
-from .abscract_transcriber import AbstractTranscriber
+from talkushka_transcriber.transcribers.base import AbstractTranscriber
 
 
 class FasterWhisperTranscriber(AbstractTranscriber):
     FASTER_WHISPER_FORMATS = ["mp3", "mp4", "m4a", "wav", "webm", "mov", "ogg", "opus"]
 
-    @dataclass
-    class Config:
-        model_size_or_path: str
+    class Config(BaseModel):
+        model_size_or_path: str = "small"
         device: str = "cpu"
         device_index: int | list[int] = 0
         compute_type: str = "int8"
@@ -22,13 +22,13 @@ class FasterWhisperTranscriber(AbstractTranscriber):
         local_files_only: bool = False
         files: dict = None
 
-    def __init__(self, model: str, device: str | None = "auto"):
-        if not self.validate_model(model):
-            logger.error("Model {model} is not valid", model=model)
-            raise ValueError(f"Model {model} is not valid")
-        self.config = self.Config(model_size_or_path=model, device=device)
-        self.whisper_model = WhisperModel(**asdict(self.config))
-        logger.debug("{cls} init with a model {model}", cls=self.__class__.__name__, model=model)
+    def __init__(self, config: dict[str, Any]):
+        if not self.validate_model(config.get("model", "")):
+            logger.error("Model {model} is not valid", model=config.get("model", ""))
+            raise ValueError(f"Model {config.get('model', '')} is not valid")
+        self.config = self.Config(**config)
+        self.whisper_model = WhisperModel(**self.config.model_dump(exclude_none=True))
+        logger.debug("{cls} init with a model {model}", cls=self.__class__.__name__, model=config["model"])
 
     @AbstractTranscriber._count_time
     def transcribe(self, path: Path) -> str:

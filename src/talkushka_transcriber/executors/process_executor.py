@@ -6,7 +6,7 @@ from typing import Any
 from loguru import logger
 from setproctitle import setproctitle
 
-from executors.abstract_executor import AbstractExecutor
+from talkushka_transcriber.executors.abstract_executor import AbstractExecutor
 
 
 class ProcessExecutor(AbstractExecutor):
@@ -93,6 +93,7 @@ class ProcessExecutor(AbstractExecutor):
 
     def stop(self):
         self._stop_event.set()
+        asyncio.gather(*asyncio.all_tasks())
         if self.is_alive():
             self._worker.join()
         logger.info(f"{self.__class__.__name__} {self._name} stopped")

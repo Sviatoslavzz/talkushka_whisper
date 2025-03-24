@@ -1,3 +1,4 @@
+import asyncio
 import uuid
 from collections.abc import AsyncIterator
 from pathlib import Path
@@ -6,10 +7,16 @@ import aiofiles
 import aiofiles.os
 from loguru import logger
 
-from app_worker import AppWorker
-from objects import MB, TranscriptionTask
-from proto_gen import AudioChunk, AudioTransferBase, HealthCheckRequest, HealthCheckResponse, Response
-from utils import get_project_root
+from talkushka_transcriber.app_worker import AppWorker
+from talkushka_transcriber.objects import MB, TranscriptionTask
+from talkushka_transcriber.proto_gen import (
+    AudioChunk,
+    AudioTransferBase,
+    HealthCheckRequest,
+    HealthCheckResponse,
+    Response,
+)
+from talkushka_transcriber.utils import get_project_root
 
 
 class AudioTransfer(AudioTransferBase):
@@ -21,7 +28,7 @@ class AudioTransfer(AudioTransferBase):
         message = None
 
         try:
-            load_path = await self.write_stream_to_file(audio_chunk_iterator)
+            load_path = await asyncio.wait_for(self.write_stream_to_file(audio_chunk_iterator), 5)
             logger.info("Successfully saved stream to file : {path}", path=load_path)
             task: TranscriptionTask = await AppWorker.get_instance().get_transcription(load_path)
             if not task.result:
@@ -62,8 +69,8 @@ class AudioTransfer(AudioTransferBase):
             await aiofiles.os.unlink(path_)
             logger.info("Finished streaming response with status : success")
         except FileNotFoundError as e:
-            logger.error("Unable to stream file:text file not found {err}", err=e.__repr__())
-            yield Response(result=False, message="stream_error:text file not found")
+            logger.error("Unable to stream file : text file not found {err}", err=e.__repr__())
+            yield Response(result=False, message="stream_error : text file not found")
 
     async def health_check(self, request: HealthCheckRequest) -> HealthCheckResponse:
         logger.info("Health check request received with message: {mes}", mes=request.message)

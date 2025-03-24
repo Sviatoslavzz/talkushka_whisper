@@ -35,3 +35,26 @@ To make the services connect to each other using mTLS you need to do the followi
 - in case you have `ca.crt` and `server` + `client` certificates - place `ca.crt`, `server.crt` and `server.key` to `cert/`
 - otherwise you can generate certificates using make, look for gen_cert commands, then place to `cert/` corresponding `ca.crt`, `server.key`, `server.crt`
 - place the same `ca.crt`, `client.crt` and `client.key` to client side
+
+
+### model_specific_settings
+*FasterWhisperTranscriber*:
+- model_size_or_path `default = small`
+- device `default = cpu`
+- device_index `default = 0`
+- compute_type `default = int8`
+- cpu_threads `default = 0`
+- num_workers `default = 1`
+- download_root `default = None`
+- local_files_only `default = False`
+- files `default = None`
+
+
+*AssemblyaiTranscriber*:
+- api_key_env `name of ENV variable that stores api_key`
+- language_detection `default = True`
+- language_code `default = None`
+- language_confidence_threshold `default = 0.6`
+- speech_threshold `default = 0.3`
+- speaker_labels `default = None`
+- speech_model `default = nano`

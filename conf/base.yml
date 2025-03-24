@@ -1,7 +1,13 @@
 transcriber:
   q_size: 200
-  cls: FasterWhisperTranscriber
-  model: small
+  cls: AssemblyaiTranscriber
+  model_specific_settings:
+    api_key_env: assemblyai_api_key
+    language_detection: True
+    language_confidence_threshold: 0.6
+    speech_threshold: 0.3
+    speech_model: nano
+
 grpc_server:
   host: "localhost"
   port: 50051

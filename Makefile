@@ -1,10 +1,12 @@
+include .env
+export
 
 GRPC_HOST="localhost"
 
 .PHONY: uninstall_all_dependencies
 
 run:
-	python3 src/main.py
+	talksuhka-transcriber
 
 install:
 	pip install -e . -U

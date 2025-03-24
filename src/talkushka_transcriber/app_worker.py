@@ -5,11 +5,11 @@ from platform import system as platform_system
 import aiofiles.os
 from loguru import logger
 
-from config.models import TranscriberConfig
-from executors.process_executor import ProcessExecutor
-from executors.transcriber_executor import TranscriberExecutor
-from objects import TranscriptionTask
-from transcribers.transcriber_worker import transcriber_worker_as_target
+from talkushka_transcriber.config.models import TranscriberConfig
+from talkushka_transcriber.executors.process_executor import ProcessExecutor
+from talkushka_transcriber.executors.transcriber_executor import TranscriberExecutor
+from talkushka_transcriber.objects import TranscriptionTask
+from talkushka_transcriber.transcribers.transcriber_worker import transcriber_worker_as_target
 
 IS_MACOS = platform_system() == "Darwin"
 
@@ -27,6 +27,8 @@ class AppWorker:
         self.config = config
         self.semaphore = asyncio.Semaphore(self.config.pool_size * 2)
         self.sem_queue_size = 0
+
+        self._transcriber_executor: TranscriberExecutor | None = None
         logger.info("{cls} initialized", cls=self.__class__.__name__)
 
     @classmethod
@@ -43,7 +45,7 @@ class AppWorker:
         """
         Transfer a task to executor and waits for the result in a separate thread
         :param executor: ProcessExecutor
-        :param task_: TranscriptionTask | DownloadTask
+        :param task_: TranscriptionTask
         """
         self.sem_queue_size += 1
         async with self.semaphore:
@@ -68,15 +70,19 @@ class AppWorker:
         and asynchronously wait for results
         Returns: TranscriptionTask
         """
-        executor = TranscriberExecutor.get_instance()
-        if not executor:
-            executor = TranscriberExecutor(transcriber_worker_as_target, config=self.config)
-            executor.configure(
+
+        if not self._transcriber_executor:
+            self._transcriber_executor = TranscriberExecutor(transcriber_worker_as_target, config=self.config)
+            self._transcriber_executor.configure(
                 q_size=self.config.q_size,
                 context="spawn" if IS_MACOS else "fork",
                 process_name="python_transcriber_worker",
             )
-            executor.set_name("transcriber_worker")
-            executor.start()
+            self._transcriber_executor.set_name("transcriber_worker")
+            self._transcriber_executor.start()
 
-        return await self.__submit_task(executor, task)
+        return await self.__submit_task(self._transcriber_executor, task)
+
+    def stop_executors(self):
+        if self._transcriber_executor:
+            self._transcriber_executor.stop()

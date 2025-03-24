@@ -1,12 +1,11 @@
 import asyncio
 
-from loguru import logger
-
-from app_worker import AppWorker
-from config.base import YAMLConfig
-from parser import get_parser
-from service.server import serve
-from utils import create_saving_dir
+from talkushka_transcriber.app_worker import AppWorker
+from talkushka_transcriber.config.base import YAMLConfig
+from talkushka_transcriber.config.logger_settings import logger
+from talkushka_transcriber.service.server import serve
+from talkushka_transcriber.utils import create_saving_dir
+from talkushka_transcriber.utils.parser import get_parser
 
 
 async def launch_server():
@@ -18,6 +17,8 @@ async def launch_server():
     AppWorker(config.data.transcriber)
 
     await serve(config.data.grpc_server)
+
+    AppWorker.get_instance().stop_executors()
 
 
 def main():

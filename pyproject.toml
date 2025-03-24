@@ -1,5 +1,5 @@
 [project]
-name = "talkushka_whisper_service"
+name = "talkushka_transcriber"
 version = "1.1.0"
 description = "aims to receive tasks for transcribing using WebSocket and transcribe audio file"
 readme = "README.md"
@@ -7,18 +7,21 @@ authors = [{ name = "Sviatoslav Zaikin" }]
 
 dependencies = [
     #    "openai_whisper==20240930",
-    "faster-whisper~=1.1.0",
+    "faster-whisper~=1.1.1",
+    "assemblyai~=0.37.0",
     "loguru~=0.7.3",
     "grpcio-tools",
-    "pydantic~=2.9.2",
+    "pydantic~=2.10.6",
     "aiofiles",
-    "setproctitle"
+    "setproctitle",
+    "python-dotenv",
+    "pydantic-settings~=2.8.1",
 ]
 requires-python = ">=3.12"
 
 [project.optional-dependencies]
 dev = [
-    "ruff~=0.8.0",
+    "ruff~=0.11",
     "betterproto[compiler,rust-codec]==2.0.0b7"
 ]
 test = [
@@ -28,7 +31,7 @@ test = [
 ]
 
 [project.scripts]
-run_server = "main:main"
+talksuhka-transcriber = "talkushka_transcriber.main:main"
 
 [tool.ruff]
 line-length = 120
@@ -95,7 +98,7 @@ convention = "google"
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "ANN001", "ANN201", "PLR2004", "INP001", "S105"]
 "conftest.py" = ["S101", "ANN001", "ANN201"]
-"src/proto_gen/*" = ["RUF009", "F401", "UP035"]
+"src/talkushka_transcriber/proto_gen/*" = ["RUF009", "F401", "UP035"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

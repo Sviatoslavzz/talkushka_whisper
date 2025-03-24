@@ -5,9 +5,9 @@ import ssl
 from grpclib.server import Server
 from loguru import logger
 
-from config.models import GrpcConfig
-from service.audio_transfer import AudioTransfer
-from utils import get_project_root
+from talkushka_transcriber.config.models import GrpcConfig
+from talkushka_transcriber.service.audio_transfer import AudioTransfer
+from talkushka_transcriber.utils import get_project_root
 
 
 def get_ssl_context():

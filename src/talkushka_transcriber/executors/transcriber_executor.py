@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 from loguru import logger
 
-from executors.process_executor import ProcessExecutor
+from talkushka_transcriber.executors.process_executor import ProcessExecutor
 
 
 class TranscriberExecutor(ProcessExecutor):

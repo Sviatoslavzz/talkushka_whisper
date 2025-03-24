@@ -2,8 +2,8 @@ from functools import partial
 
 from pydantic import BaseModel, Field, field_validator
 
-from config.factory import get_transcriber_cls
-from transcribers.abscract_transcriber import AbstractTranscriber
+from talkushka_transcriber.config.factory import get_transcriber_cls
+from talkushka_transcriber.transcribers.base import AbstractTranscriber
 
 
 class TranscriberConfig(BaseModel):
@@ -13,10 +13,10 @@ class TranscriberConfig(BaseModel):
         title="Transcriber class",
         description="Transcriber class, currently available only FasterWhisperTranscriber",
     )
-    model: str | None = Field("small", title="Whisper model")
     pool_size: int | None = Field(
         4, title="Transcriber worker pool size", description="How many transcription tasks could be run at parallel"
     )
+    model_specific_settings: dict | None = Field(default_factory=dict, title="Model specific settings")
 
     @field_validator("cls", mode="before")
     @classmethod

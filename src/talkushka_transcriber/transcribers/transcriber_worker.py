@@ -7,8 +7,8 @@ from typing import Any
 
 from loguru import logger
 
-from config.models import TranscriberConfig
-from objects import TranscriptionTask
+from talkushka_transcriber.config.models import TranscriberConfig
+from talkushka_transcriber.objects import TranscriptionTask
 
 
 class TranscriberWorker:
@@ -21,7 +21,7 @@ class TranscriberWorker:
         return cls._instance
 
     def __init__(self, config: TranscriberConfig):
-        self.transcriber = config.cls(model=config.model)
+        self.transcriber = config.cls(config=config.model_specific_settings)
         self.pool = ThreadPoolExecutor(max_workers=config.pool_size)
 
         logger.info(f"{self.__class__.__name__} initialized")
