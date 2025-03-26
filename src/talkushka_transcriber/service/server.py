@@ -7,7 +7,7 @@ from loguru import logger
 
 from talkushka_transcriber.config.models import GrpcConfig
 from talkushka_transcriber.service.audio_transfer import AudioTransfer
-from talkushka_transcriber.utils import get_project_root
+from talkushka_transcriber.utils.functions import get_project_root
 
 
 def get_ssl_context():

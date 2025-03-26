@@ -4,7 +4,7 @@ from talkushka_transcriber.app_worker import AppWorker
 from talkushka_transcriber.config.base import YAMLConfig
 from talkushka_transcriber.config.logger_settings import logger
 from talkushka_transcriber.service.server import serve
-from talkushka_transcriber.utils import create_saving_dir
+from talkushka_transcriber.utils.functions import create_saving_dir
 from talkushka_transcriber.utils.parser import get_parser
 
 

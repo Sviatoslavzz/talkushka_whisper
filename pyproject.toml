@@ -7,15 +7,17 @@ authors = [{ name = "Sviatoslav Zaikin" }]
 
 dependencies = [
     #    "openai_whisper==20240930",
-    "faster-whisper~=1.1.1",
-    "assemblyai~=0.37.0",
-    "loguru~=0.7.3",
+    "faster-whisper~=1.1",
+    "assemblyai~=0.37",
+    "loguru~=0.7",
     "grpcio-tools",
-    "pydantic~=2.10.6",
+    "pydantic~=2.10",
     "aiofiles",
     "setproctitle",
     "python-dotenv",
-    "pydantic-settings~=2.8.1",
+    "pydantic-settings~=2.8",
+    "grpclib",
+    "betterproto[rust-codec]==2.0.0b7",
 ]
 requires-python = ">=3.12"
 

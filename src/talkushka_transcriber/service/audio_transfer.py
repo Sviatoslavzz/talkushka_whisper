@@ -16,7 +16,7 @@ from talkushka_transcriber.proto_gen import (
     HealthCheckResponse,
     Response,
 )
-from talkushka_transcriber.utils import get_project_root
+from talkushka_transcriber.utils.functions import get_project_root
 
 
 class AudioTransfer(AudioTransferBase):
